@@ -1,66 +1,127 @@
 <script type="text/javascript">
-    RED.nodes.registerType('soap-config', {
-        category: 'config',
-        defaults: {
-            wsdl: {value: "", required: true},
-            auth: {value: "0", required: true},
-            user: {value: "", required: false},
-            pass: {value: "", required: false},
-            key:  {value: "", required: false},
-            cert: {value: "", required: false},
-            token: {value: "", required: false}
-        },
-        label: function () {
-            return this.wsdl;
-        }
-    });
+	RED.nodes.registerType('soap-config', {
+		category: 'config',
+		defaults: {
+			wsdl: {value: "", required: true},
+			auth: {value: "none", required: true},
+			user: {value: "", required: false},
+			pass: {value: "", required: false},
+			key:  {value: "", required: false},
+			cert: {value: "", required: false},
+			token: {value: "", required: false},
+			method: {value: "", required: false}
+		},
+		label: function () {
+			return this.wsdl;
+		},
+		oneditprepare: function() {
+				const user = $('#node-config-input-user').parent().hide();
+				const pass = $('#node-config-input-pass').parent().hide();
+				const key = $('#node-config-input-key').parent().hide();
+				const cert = $('#node-config-input-cert').parent().hide();
+				const token = $('#node-config-input-token').parent().hide();
+				const method = $('#node-config-input-method').parent().hide();
+
+				$('#node-config-input-auth').change(() => {
+						const value = $('#node-config-input-auth').val()
+						switch(value) {
+								case 'basic':
+								case 'ws': 
+									user.show();
+									pass.show();
+									key.hide();
+									cert.hide();
+									token.hide();
+									method.hide();
+									break;
+								case 'certificate': 
+									user.hide();
+									pass.hide();
+									key.show();
+									cert.show();
+									token.hide();
+									method.hide();
+									break;
+								case 'token':
+									user.hide();
+									pass.hide();
+									key.hide();
+									cert.hide();
+									token.show();
+									method.hide();
+									break;
+								case 'cookies':
+									user.show();
+									pass.show();
+									key.hide();
+									cert.hide();
+									token.hide();
+									method.show();
+									break;
+								case 'none':
+									user.hide();
+									pass.hide();
+									key.hide();
+									cert.hide();
+									token.hide();
+									method.hide();
+									break;
+							}
+					});
+			}
+	});
 </script>
 
 <script type="text/x-red" data-template-name="soap-config">
-    <div class="form-row">
-        <label for="node-config-input-wsdl"><i class="fa fa-globe"></i> WSDL</label>
-        <input type="text" id="node-config-input-wsdl">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-auth"><i class="fa fa-unlock"></i> Auth</label>
-        <select type="text" id="node-config-input-auth">
-            <option value="0">None</option>
-            <option value="1">Basic Auth</option>
-            <option value="2">Client Certificate</option>
-            <option value="3">WS-Security</option>
-            <option value="4">Bearer Token</option>
-        </select>
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-user"><i class="fa fa-user"></i> Username</label>
-        <input type="text" id="node-config-input-user">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-pass"><i class="fa fa-lock"></i> Password</label>
-        <input type="password" id="node-config-input-pass">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-key"><i class="fa fa-file"></i> Client Key</label>
-        <input type="text" id="node-config-input-key">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-cert"><i class="fa fa-file"></i> Client Certificate</label>
-        <input type="text" id="node-config-input-cert">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-token"><i class="fa fa-key"></i> Token</label>
-        <input type="text" id="node-config-input-token">
-    </div>
+	<div class="form-row">
+				<label for="node-config-input-wsdl"><i class="fa fa-globe"></i> WSDL</label>
+				<input type="text" id="node-config-input-wsdl">
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-auth"><i class="fa fa-unlock"></i> Auth</label>
+				<select type="text" id="node-config-input-auth">
+						<option value="none">None</option>
+						<option value="basic">Basic Auth</option>
+						<option value="certificate">Client Certificate</option>
+						<option value="ws">WS-Security</option>
+						<option value="token">Bearer Token</option>
+						<option value="cookies">Cookies</option>
+				</select>
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-user"><i class="fa fa-user"></i> Username</label>
+				<input type="text" id="node-config-input-user">
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-pass"><i class="fa fa-lock"></i> Password</label>
+				<input type="password" id="node-config-input-pass">
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-key"><i class="fa fa-file"></i> Client Key</label>
+				<input type="text" id="node-config-input-key">
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-cert"><i class="fa fa-file"></i> Client Certificate</label>
+				<input type="text" id="node-config-input-cert">
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-token"><i class="fa fa-key"></i> Token</label>
+				<input type="text" id="node-config-input-token">
+		</div>
+		<div class="form-row">
+				<label for="node-config-input-auth-method"><i class="fa fa-cube"></i> Method</label>
+				<input type="text" id="node-config-input-method">
+		</div>
 </script>
 
 <script type="text/x-red" data-help-name="soap-config">
-    <p>Create SOAP config</p>
-    <p>To set up SOAP request, create a new soap config:</p> 
-    <p>
-        <ul>
-            <li>Enter the WSDL address to the <i>WSDL</i> field. </li>
-            <li> Select <i>Auth</i> method, the default would be set to None.</li>
-            <li> Fill in <i>Username</i>, <i>Password</i>, <i>Client Key</i>, <i>Client Certificate</i>, <i>Token</i> if needed. </li>
-        </ul>
-    </p>
+	<p>Create SOAP config</p>
+		<p>To set up SOAP request, create a new soap config:</p> 
+		<p>
+				<ul>
+						<li>Enter the WSDL address to the <i>WSDL</i> field. </li>
+						<li> Select <i>Auth</i> method, the default would be set to None.</li>
+						<li> Fill in <i>Username</i>, <i>Password</i>, <i>Client Key</i>, <i>Client Certificate</i>, <i>Token</i> if needed. </li>
+				</ul>
+		</p>
 </script>

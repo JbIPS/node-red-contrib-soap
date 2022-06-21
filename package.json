@@ -37,7 +37,8 @@
     },
     "homepage": "https://github.com/chameleonbr/node-red-contrib-soap#readme",
     "dependencies": {
-        "soap": "^0.11.4"
+        "soap": "^0.45.0",
+        "soap-cookie": "^0.10.1"
     },
     "maintainers": [
         {
