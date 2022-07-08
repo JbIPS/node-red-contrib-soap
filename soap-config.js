@@ -4,6 +4,7 @@ module.exports = function(RED) {
 	function SoapConfig(n) {
 		RED.nodes.createNode(this, n);
 		this.wsdl = n.wsdl;
+		this.wsdlHeader = n.wsdlHeader ? JSON.parse(n.wsdlHeader) : n.wsdlHeader;
 		this.auth = n.auth;
 		this.user = n.user;
 		this.pass = n.pass;
@@ -19,7 +20,8 @@ module.exports = function(RED) {
 					this.wsdl += '?wsdl';
 				}
 				try {
-					this.client = await soap.createClientAsync(this.wsdl);
+					this.client = await soap.createClientAsync(this.wsdl, { wsdl_headers: this.wsdlHeader });
+					Object.entries(this.wsdlHeader).forEach(([key, value]) => this.client.addHttpHeader(key, value));
 					switch (this.auth) {
 						case 'basic':
 							this.client.setSecurity(new soap.BasicAuthSecurity(this.user, this.pass));
