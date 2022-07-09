@@ -26,8 +26,8 @@ module.exports = function(RED) {
 						done();
 					} catch (err) {
 						node.status({ fill: "red", shape: "dot", text: "Service Call Error: " + err });
-						node.error("Service Call Error: " + err);
-						done(err);
+						node.error(err.message);
+						done(err.message);
 						return;
 					}
 				} else {
@@ -37,8 +37,8 @@ module.exports = function(RED) {
 				};
 			} catch (err) {
 				node.status({ fill: "red", shape: "dot", text: "Could not get client" });
-				node.error(err);
-				done(err);
+				node.error(err.message);
+				done(err.message);
 			}
 		});
 	};

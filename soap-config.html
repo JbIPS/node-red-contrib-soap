@@ -4,6 +4,7 @@
 		defaults: {
 			wsdl: {value: "", required: true},
 			wsdlHeader: {value: "", required: false},
+			wsdlHeaderType: {value: "json", required: false},
 			auth: {value: "none", required: true},
 			user: {value: "", required: false},
 			pass: {value: "", required: false},
@@ -24,9 +25,10 @@
 				const method = $('#node-config-input-method').parent().hide();
 
 				$("#node-config-input-wsdlHeader").typedInput({
-						type:"json",
-						types:["json"]
-				})
+						default:"json",
+						types:["json", "env"],
+						typeField: $("#node-config-input-wsdlHeaderType")
+				});
 
 				$('#node-config-input-auth').change(() => {
 						const value = $('#node-config-input-auth').val()
@@ -84,8 +86,9 @@
 				<input type="text" id="node-config-input-wsdl">
 		</div>
 	<div class="form-row">
-				<label for="node-config-input-wsdlHeader"><i class="fa fa-lock"></i> WSDL</label>
+				<label for="node-config-input-wsdlHeader"><i class="fa fa-lock"></i> WSDL Headers</label>
 				<input type="text" id="node-config-input-wsdlHeader">
+				<input type="hidden" id="node-config-input-wsdlHeaderType">
 		</div>
 		<div class="form-row">
 				<label for="node-config-input-auth"><i class="fa fa-unlock"></i> Auth</label>

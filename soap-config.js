@@ -4,7 +4,6 @@ module.exports = function(RED) {
 	function SoapConfig(n) {
 		RED.nodes.createNode(this, n);
 		this.wsdl = n.wsdl;
-		this.wsdlHeader = n.wsdlHeader ? JSON.parse(n.wsdlHeader) : n.wsdlHeader;
 		this.auth = n.auth;
 		this.user = n.user;
 		this.pass = n.pass;
@@ -12,6 +11,8 @@ module.exports = function(RED) {
 		this.cert = n.cert;
 		this.token = n.token;
 		this.method = n.method;
+		this.wsdlHeader = RED.util.evaluateNodeProperty(n.wsdlHeader, n.wsdlHeaderType, this);
+		this.wsdlHeader = n.wsdlHeaderType === 'env' ? JSON.parse(this.wsdlHeader) : this.wsdlHeader;
 
 		this.getClient = async () => {
 			if (!this.client) {
