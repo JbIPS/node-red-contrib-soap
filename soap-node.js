@@ -20,13 +20,12 @@ module.exports = function(RED) {
 
 				if (client.hasOwnProperty(node.method)) {
 					try {
-						msg.payload = (await client[`${node.method}Async`](msg.payload))[0];
+						msg.payload = (await client[`${node.method}Async`](msg.payload, msg.options))[0];
 						node.status({ fill: "green", shape: "dot", text: "SOAP result received" });
 						send(msg);
 						done();
 					} catch (err) {
 						node.status({ fill: "red", shape: "dot", text: "Service Call Error: " + err });
-						node.error(err.message);
 						done(err.message);
 						return;
 					}
