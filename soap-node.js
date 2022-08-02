@@ -26,6 +26,9 @@ module.exports = function(RED) {
 						done();
 					} catch (err) {
 						node.status({ fill: "red", shape: "dot", text: "Service Call Error: " + err });
+						// Preserve error in msg
+						msg.response = err.response;
+						msg.statusCode = err.response.status;
 						done(err.message);
 						return;
 					}
